@@ -2,15 +2,15 @@
 const App = {
   // 服务器地址 - 根据环境自动选择
   // 开发环境: http://localhost:3000
-  // 生产环境: 通过相对路径或环境变量
+  // 生产环境: 使用Render后端地址
   serverUrl: (function() {
     const hostname = window.location.hostname;
     // 如果是localhost或127.0.0.1，使用本地服务器
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return 'http://localhost:3000';
     }
-    // 生产环境使用相对路径（假设后端在同一域名）
-    return '';
+    // 生产环境使用Render后端地址
+    return 'https://texas-poker-server.onrender.com';
   })(),
   socket: null,
   
