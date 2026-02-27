@@ -1,0 +1,474 @@
+/* pages/game/game.wxss */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1a472a 0%, #0d2818 100%);
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+/* 顶部信息栏 */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.room-name {
+  font-size: 28rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+.game-stage {
+  font-size: 32rpx;
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.pot-info {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.pot-label {
+  font-size: 24rpx;
+  color: #aaa;
+}
+
+.pot-amount {
+  font-size: 36rpx;
+  color: #ffd700;
+  font-weight: bold;
+}
+
+/* 牌桌区域 */
+.table-area {
+  position: relative;
+  height: 500rpx;
+  background: radial-gradient(ellipse at center, #2d5a3d 0%, #1a472a 60%, #0d2818 100%);
+  border: 8rpx solid #4a7c59;
+  border-radius: 50%;
+  margin: 20rpx 0;
+  box-shadow: inset 0 0 60rpx rgba(0, 0, 0, 0.5), 0 10rpx 40rpx rgba(0, 0, 0, 0.5);
+}
+
+/* 公共牌区域 */
+.community-cards {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 10rpx;
+}
+
+.card {
+  width: 70rpx;
+  height: 100rpx;
+  background: #fff;
+  border-radius: 8rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.3);
+  position: relative;
+  font-weight: bold;
+  font-size: 28rpx;
+}
+
+.card.red {
+  color: #e74c3c;
+}
+
+.card.black {
+  color: #2c3e50;
+}
+
+.card-back {
+  background: linear-gradient(135deg, #c0392b 25%, #e74c3c 25%, #e74c3c 50%, #c0392b 50%, #c0392b 75%, #e74c3c 75%);
+  background-size: 10rpx 10rpx;
+  border: 2rpx solid #fff;
+}
+
+/* 玩家区域 */
+.players-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 40rpx;
+}
+
+.player-position {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 玩家位置布局 - 6人桌 */
+.player-0 { top: 20rpx; left: 50%; transform: translateX(-50%); }  /* 庄家 */
+.player-1 { top: 80rpx; right: 40rpx; }
+.player-2 { bottom: 80rpx; right: 60rpx; }
+.player-3 { bottom: 20rpx; left: 50%; transform: translateX(-50%); }
+.player-4 { bottom: 80rpx; left: 60rpx; }
+.player-5 { top: 80rpx; left: 40rpx; }
+
+/* 当前玩家高亮 */
+.player-0.active,
+.player-1.active,
+.player-2.active,
+.player-3.active,
+.player-4.active,
+.player-5.active {
+  transform: translateX(-50%) scale(1.05);
+}
+
+.player-0.active { transform: scale(1.05); }
+.player-1.active { transform: scale(1.05); }
+.player-2.active { transform: scale(1.05); }
+.player-3.active { transform: scale(1.05); }
+.player-4.active { transform: scale(1.05); }
+.player-5.active { transform: scale(1.05); }
+
+/* 玩家卡片 */
+.player-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.player-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  border: 4rpx solid #4a7c59;
+  background: #2c3e50;
+  overflow: hidden;
+}
+
+.player-avatar image {
+  width: 100%;
+  height: 100%;
+}
+
+.player-name {
+  font-size: 22rpx;
+  color: #fff;
+  max-width: 100rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.player-chips {
+  font-size: 20rpx;
+  color: #ffd700;
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.player-bet {
+  font-size: 20rpx;
+  color: #e74c3c;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2rpx 8rpx;
+  border-radius: 8rpx;
+}
+
+.player-status {
+  font-size: 18rpx;
+  color: #aaa;
+  font-style: italic;
+}
+
+.dealer-badge {
+  font-size: 18rpx;
+  color: #ffd700;
+  background: #c0392b;
+  padding: 2rpx 8rpx;
+  border-radius: 8rpx;
+  margin-top: 4rpx;
+}
+
+/* 我的手牌展示区 */
+.my-cards {
+  display: flex;
+  justify-content: center;
+  gap: 20rpx;
+  padding: 30rpx;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16rpx;
+  margin: 20rpx 0;
+}
+
+.my-card {
+  width: 90rpx;
+  height: 130rpx;
+  border-radius: 10rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 6rpx 12rpx rgba(0, 0, 0, 0.4);
+  font-weight: bold;
+  font-size: 36rpx;
+}
+
+.my-card.red { color: #e74c3c; }
+.my-card.black { color: #ecf0f1; background: #2c3e50; }
+
+/* 操作按钮区 */
+.action-area {
+  display: flex;
+  justify-content: center;
+  gap: 20rpx;
+  padding: 30rpx;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16rpx;
+}
+
+.action-btn {
+  flex: 1;
+  height: 90rpx;
+  border-radius: 45rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.btn-fold {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-check {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.btn-call {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn-raise {
+  background: #f39c12;
+  color: #fff;
+}
+
+.btn-allin {
+  background: #9b59b6;
+  color: #fff;
+}
+
+.btn-disabled {
+  background: #555;
+  color: #888;
+}
+
+/* 加注弹窗 */
+.raise-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.raise-modal-content {
+  background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  width: 80%;
+  border: 2rpx solid #4a7c59;
+}
+
+.raise-modal-title {
+  font-size: 36rpx;
+  color: #ffd700;
+  text-align: center;
+  margin-bottom: 30rpx;
+  font-weight: bold;
+}
+
+.raise-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.raise-option {
+  height: 80rpx;
+  background: #34495e;
+  border-radius: 12rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 28rpx;
+  border: 2rpx solid #4a7c59;
+}
+
+.raise-option.selected {
+  background: #27ae60;
+  border-color: #ffd700;
+}
+
+.raise-custom {
+  margin-bottom: 30rpx;
+}
+
+.raise-custom input {
+  background: #34495e;
+  border: 2rpx solid #4a7c59;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  color: #fff;
+  font-size: 32rpx;
+}
+
+.raise-modal-btns {
+  display: flex;
+  gap: 20rpx;
+}
+
+.raise-modal-btn {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.btn-cancel {
+  background: #7f8c8d;
+  color: #fff;
+}
+
+.btn-confirm {
+  background: #27ae60;
+  color: #fff;
+}
+
+/* 摊牌结果弹窗 */
+.showdown-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.showdown-modal-content {
+  background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  width: 85%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 2rpx solid #ffd700;
+}
+
+.showdown-winner {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.winner-label {
+  font-size: 28rpx;
+  color: #aaa;
+}
+
+.winner-name {
+  font-size: 40rpx;
+  color: #ffd700;
+  font-weight: bold;
+  margin-top: 10rpx;
+}
+
+.win-amount {
+  font-size: 32rpx;
+  color: #27ae60;
+  margin-top: 10rpx;
+}
+
+.showdown-community {
+  margin-bottom: 30rpx;
+}
+
+.showdown-community-title {
+  font-size: 26rpx;
+  color: #aaa;
+  margin-bottom: 15rpx;
+}
+
+.showdown-cards {
+  display: flex;
+  justify-content: center;
+  gap: 10rpx;
+}
+
+.showdown-player-hands {
+  margin-top: 20rpx;
+}
+
+.player-hand {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20rpx;
+  border-radius: 12rpx;
+  margin-bottom: 15rpx;
+}
+
+.player-hand-name {
+  font-size: 26rpx;
+  color: #fff;
+  margin-bottom: 10rpx;
+}
+
+.player-hand-cards {
+  display: flex;
+  gap: 10rpx;
+  align-items: center;
+}
+
+.player-hand-type {
+  font-size: 24rpx;
+  color: #ffd700;
+  margin-left: 10rpx;
+}
+
+.showdown-close-btn {
+  width: 100%;
+  height: 80rpx;
+  background: #27ae60;
+  border-radius: 40rpx;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-top: 20rpx;
+}

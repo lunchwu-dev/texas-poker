@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>德州扑克</title>
+  <link rel="stylesheet" href="styles/common.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 登录页面 -->
+    <div id="page-login" class="page">
+      <div class="login-container">
+        <div class="logo-area">
+          <span class="poker-icon">🃏</span>
+          <h1 class="title">德州扑克</h1>
+        </div>
+        
+        <button class="btn-wechat" id="btn-wechat-login">
+          <span class="wechat-icon">💬</span>
+          <span>微信一键登录</span>
+        </button>
+        
+        <div class="guest-login" id="btn-guest-login">
+          <span>暂不登录，先看看</span>
+        </div>
+        
+        <div class="features">
+          <div class="feature-item">
+            <span class="feature-icon">🎮</span>
+            <span class="feature-text">好友对战</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🏆</span>
+            <span class="feature-text">竞技排行</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">⚡</span>
+            <span class="feature-text">实时对战</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 大厅页面 -->
+    <div id="page-index" class="page hidden">
+      <div class="header">
+        <div class="user-info" id="btn-profile">
+          <img class="avatar" id="user-avatar" src="" alt="头像">
+          <span class="nickname" id="user-nickname">游客</span>
+        </div>
+      </div>
+      
+      <div class="tabs">
+        <div class="tab active" data-tab="rooms" id="tab-rooms">牌桌列表</div>
+        <div class="tab" data-tab="create" id="tab-create">创建房间</div>
+      </div>
+      
+      <!-- 牌桌列表 -->
+      <div id="room-list" class="room-list">
+        <div class="empty-tip" id="empty-tip" style="display: none;">
+          <span>暂无房间，请创建房间</span>
+        </div>
+      </div>
+      
+      <!-- 创建房间 -->
+      <div id="create-room" class="create-room hidden">
+        <div class="input-group">
+          <label class="label">房间名称</label>
+          <input type="text" id="input-room-name" class="input-field" placeholder="输入房间名称">
+        </div>
+        
+        <div class="input-group">
+          <label class="label">密码（可选）</label>
+          <input type="password" id="input-password" class="input-field" placeholder="设置房间密码">
+        </div>
+        
+        <button class="btn-create" id="btn-create-room">创建房间</button>
+      </div>
+      
+      <!-- 加入房间弹窗 -->
+      <div class="modal" id="join-modal" style="display: none;">
+        <div class="modal-content" id="modal-content">
+          <h3 class="modal-title">加入房间</h3>
+          <input type="text" id="input-join-room-id" class="input-field" placeholder="请输入房间号">
+          <input type="password" id="input-join-password" class="input-field" placeholder="请输入密码（如有）">
+          <button class="btn-join" id="btn-confirm-join">加入</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 房间页面 -->
+    <div id="page-room" class="page hidden">
+      <div class="room-header">
+        <button class="btn-back" id="btn-leave-room">← 离开</button>
+        <h2 class="room-title" id="room-name">房间</h2>
+        <div></div>
+      </div>
+      
+      <div class="players-list" id="players-list">
+        <!-- 玩家列表 -->
+      </div>
+      
+      <div class="room-actions">
+        <button class="btn-start-game" id="btn-start-game">开始游戏</button>
+      </div>
+      
+      <div class="invite-tip">
+        <span>分享邀请好友：</span>
+        <span id="invite-code">-</span>
+      </div>
+    </div>
+
+    <!-- 游戏页面 -->
+    <div id="page-game" class="page hidden">
+      <div class="game-header">
+        <button class="btn-back" id="btn-exit-game">← 退出</button>
+        <div class="game-info">
+          <span class="pot">底池: <span id="pot-amount">0</span></span>
+        </div>
+      </div>
+      
+      <div class="community-cards" id="community-cards">
+        <!-- 公共牌 -->
+      </div>
+      
+      <div class="players-area" id="players-area">
+        <!-- 玩家区域 -->
+      </div>
+      
+      <div class="my-cards" id="my-cards">
+        <!-- 我的手牌 -->
+      </div>
+      
+      <div class="action-buttons" id="action-buttons" style="display: none;">
+        <button class="btn-action btn-check" id="btn-check">看牌</button>
+        <button class="btn-action btn-call" id="btn-call">跟注 <span id="call-amount">0</span></button>
+        <button class="btn-action btn-raise" id="btn-raise">加注</button>
+        <button class="btn-action btn-fold" id="btn-fold">弃牌</button>
+      </div>
+      
+      <div class="game-status" id="game-status">
+        <span id="status-text">等待游戏开始...</span>
+      </div>
+      
+      <!-- 摊牌弹窗 -->
+      <div class="modal" id="showdown-modal" style="display: none;">
+        <div class="modal-content">
+          <h3 class="modal-title">游戏结果</h3>
+          <div id="showdown-content"></div>
+          <button class="btn-confirm" id="btn-close-showdown">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 个人中心页面 -->
+    <div id="page-profile" class="page hidden">
+      <div class="profile-header">
+        <img class="avatar-large" id="profile-avatar" src="" alt="头像">
+        <h2 class="nickname-large" id="profile-nickname">游客</h2>
+      </div>
+      
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-value" id="stat-games">0</span>
+          <span class="stat-label">游戏局数</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="stat-wins">0</span>
+          <span class="stat-label">获胜次数</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="stat-chips">1000</span>
+          <span class="stat-label">游戏币</span>
+        </div>
+      </div>
+      
+      <div class="profile-menu">
+        <div class="menu-item" id="btn-logout">
+          <span>退出登录</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>

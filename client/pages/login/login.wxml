@@ -1,0 +1,36 @@
+<!--pages/login/login.wxml-->
+<view class="container">
+  <view class="logo-area">
+    <text class="poker-icon">🃏</text>
+    <text class="title">德州扑克</text>
+  </view>
+  
+  <button 
+    class="btn-wechat" 
+    bindtap="handleWechatLogin"
+    open-type="getPhoneNumber"
+    bindgetphonenumber="getPhoneNumber"
+  >
+    <text class="wechat-icon">💬</text>
+    <text>微信一键登录</text>
+  </button>
+  
+  <view class="guest-login" bindtap="handleGuestLogin">
+    <text>暂不登录，先看看</text>
+  </view>
+  
+  <view class="features">
+    <view class="feature-item">
+      <text class="feature-icon">🎮</text>
+      <text class="feature-text">好友对战</text>
+    </view>
+    <view class="feature-item">
+      <text class="feature-icon">🏆</text>
+      <text class="feature-text">竞技排行</text>
+    </view>
+    <view class="feature-item">
+      <text class="feature-icon">⚡</text>
+      <text class="feature-text">实时对战</text>
+    </view>
+  </view>
+</view>

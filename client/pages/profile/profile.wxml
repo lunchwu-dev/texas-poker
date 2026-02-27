@@ -1,0 +1,97 @@
+<!--pages/profile/profile.wxml-->
+<view class="container">
+  <!-- 用户信息区 -->
+  <view class="user-section">
+    <view class="user-avatar">
+      <image src="{{userInfo.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill"></image>
+    </view>
+    <view class="user-name">{{userInfo.nickName || '玩家'}}</view>
+    <view class="user-id">ID: {{userInfo.id}}</view>
+  </view>
+
+  <!-- 统计概览 -->
+  <view class="stats-overview">
+    <view class="stats-card">
+      <view class="stats-value">{{stats.totalGames}}</view>
+      <view class="stats-label">总场次</view>
+    </view>
+    <view class="stats-card">
+      <view class="stats-value">{{stats.winRate}}%</view>
+      <view class="stats-label">胜率</view>
+    </view>
+    <view class="stats-card">
+      <view class="stats-value">{{stats.wins}}</view>
+      <view class="stats-label">获胜次数</view>
+    </view>
+  </view>
+
+  <!-- 详细统计 -->
+  <view class="stats-detail">
+    <view class="section-title">详细数据</view>
+    
+    <view class="stat-item">
+      <view class="stat-item-label">总游戏场次</view>
+      <view class="stat-item-value">{{stats.totalGames}}</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-item-label">获胜场次</view>
+      <view class="stat-item-value">{{stats.wins}}</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-item-label">失败场次</view>
+      <view class="stat-item-value">{{stats.losses}}</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-item-label">平局场次</view>
+      <view class="stat-item-value">{{stats.ties}}</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-item-label">胜率</view>
+      <view class="stat-item-value">{{stats.winRate}}%</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-item-label">最高连胜</view>
+      <view class="stat-item-value">{{stats.maxWinStreak}}</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-item-label">最长持续</view>
+      <view class="stat-item-value">{{stats.maxPlayTime}}</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-item-label">总游戏时长</view>
+      <view class="stat-item-value">{{stats.totalPlayTime}}</view>
+    </view>
+  </view>
+
+  <!-- 成就展示 -->
+  <view class="achievements">
+    <view class="section-title">成就徽章</view>
+    <view class="achievements-grid">
+      <view class="achievement-item {{stats.totalGames >= 10 ? 'unlocked' : 'locked'}}">
+        <view class="achievement-icon">🎯</view>
+        <view class="achievement-name">初出茅庐</view>
+        <view class="achievement-desc">完成10场游戏</view>
+      </view>
+      <view class="achievement-item {{stats.totalGames >= 50 ? 'unlocked' : 'locked'}}">
+        <view class="achievement-icon">🏆</view>
+        <view class="achievement-name">德州老手</view>
+        <view class="achievement-desc">完成50场游戏</view>
+      </view>
+      <view class="achievement-item {{stats.winRate >= 50 ? 'unlocked' : 'locked'}}">
+        <view class="achievement-icon">⭐</view>
+        <view class="achievement-name">胜率达人</view>
+        <view class="achievement-desc">胜率达到50%</view>
+      </view>
+      <view class="achievement-item {{stats.maxWinStreak >= 5 ? 'unlocked' : 'locked'}}">
+        <view class="achievement-icon">🔥</view>
+        <view class="achievement-name">连胜达人</view>
+        <view class="achievement-desc">达成5连胜</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="bottom-actions">
+    <button class="btn-logout" bindtap="logout">退出登录</button>
+  </view>
+</view>

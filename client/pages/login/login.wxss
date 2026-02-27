@@ -1,0 +1,86 @@
+/* pages/login/login.wxss */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  padding: 40px 20px;
+}
+
+.logo-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.poker-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 42px;
+  font-weight: 900;
+  color: #e94560;
+  text-shadow: 0 0 30px rgba(233, 69, 96, 0.6);
+  letter-spacing: 4px;
+}
+
+.btn-wechat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #07c160 0%, #06ad56 100%);
+  color: white;
+  border: none;
+  padding: 18px 50px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 6px 20px rgba(7, 193, 96, 0.4);
+  transition: all 0.3s ease;
+  width: 80%;
+  margin-bottom: 20px;
+}
+
+.btn-wechat:active {
+  transform: scale(0.97);
+}
+
+.wechat-icon {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.guest-login {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 80px;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feature-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.feature-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
