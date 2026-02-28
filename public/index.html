@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>德州扑克</title>
-  <link rel="stylesheet" href="styles/common.css">
+  <link rel="stylesheet" href="styles/ios-style.css">
 </head>
 <body>
   <div id="app">
@@ -14,9 +14,11 @@
       <div class="logo-area">
         <span class="poker-icon">🃏</span>
         <h1 class="title">德州扑克</h1>
+        <p class="subtitle">随时随地，享受德州扑克的乐趣</p>
       </div>
       
       <div class="loading-tip">
+        <div class="loading-spinner"></div>
         <span>正在为您分配账号...</span>
       </div>
       
@@ -39,38 +41,45 @@
 
     <!-- 大厅页面 -->
     <div id="page-index" class="page hidden">
-      <div class="header">
-        <div class="user-info" id="btn-profile">
-          <img class="avatar" id="user-avatar" src="" alt="头像">
-          <span class="nickname" id="user-nickname">游客</span>
+      <div class="nav-header">
+        <button class="nav-button" id="btn-profile">个人中心</button>
+        <h1 class="nav-title">德州扑克</h1>
+        <button class="nav-button" id="btn-refresh">刷新</button>
+      </div>
+      
+      <div class="user-card">
+        <div id="user-avatar" class="avatar"></div>
+        <div class="user-info-text">
+          <div id="user-nickname" class="user-name">游客</div>
+          <div class="user-status">在线</div>
         </div>
       </div>
       
-      <div class="tabs">
-        <div class="tab active" data-tab="rooms" id="tab-rooms">牌桌列表</div>
-        <div class="tab" data-tab="create" id="tab-create">创建房间</div>
+      <div class="tab-bar">
+        <div class="tab-item active" data-tab="rooms" id="tab-rooms">房间列表</div>
+        <div class="tab-item" data-tab="create" id="tab-create">创建房间</div>
       </div>
       
       <!-- 牌桌列表 -->
       <div id="room-list" class="room-list">
         <div class="empty-tip" id="empty-tip" style="display: none;">
-          <span>暂无房间，请创建房间</span>
+          <span>暂无房间，创建一个新房间吧！</span>
         </div>
       </div>
       
       <!-- 创建房间 -->
-      <div id="create-room" class="create-room hidden">
-        <div class="input-group">
-          <label class="label">房间名称</label>
-          <input type="text" id="input-room-name" class="input-field" placeholder="输入房间名称">
+      <div id="create-room" class="form-section hidden">
+        <div class="form-group">
+          <label class="form-label">房间名称</label>
+          <input type="text" id="input-room-name" class="form-input" placeholder="输入房间名称">
         </div>
         
-        <div class="input-group">
-          <label class="label">密码（可选）</label>
-          <input type="password" id="input-password" class="input-field" placeholder="设置房间密码">
+        <div class="form-group">
+          <label class="form-label">房间密码（可选）</label>
+          <input type="password" id="input-password" class="form-input" placeholder="留空表示公开房间">
         </div>
         
-        <button class="btn-create" id="btn-create-room">创建房间</button>
+        <button class="btn-primary" id="btn-create-room">创建房间</button>
       </div>
       
       <!-- 加入房间弹窗 -->
@@ -108,34 +117,42 @@
 
     <!-- 游戏页面 -->
     <div id="page-game" class="page hidden">
-      <div class="game-header">
-        <button class="btn-back" id="btn-exit-game">← 退出</button>
-        <div class="game-info">
-          <span class="pot">底池: <span id="pot-amount">0</span></span>
+      <div class="game-table">
+        <div class="game-header">
+          <button class="nav-button" id="btn-exit-game">← 返回</button>
+          <h1 class="nav-title">游戏进行中</h1>
+          <button class="nav-button" onclick="showGameMenu()">菜单</button>
         </div>
-      </div>
-      
-      <div class="community-cards" id="community-cards">
-        <!-- 公共牌 -->
-      </div>
-      
-      <div class="players-area" id="players-area">
-        <!-- 玩家区域 -->
-      </div>
-      
-      <div class="my-cards" id="my-cards">
-        <!-- 我的手牌 -->
-      </div>
-      
-      <div class="action-buttons" id="action-buttons" style="display: none;">
-        <button class="btn-action btn-check" id="btn-check">看牌</button>
-        <button class="btn-action btn-call" id="btn-call">跟注 <span id="call-amount">0</span></button>
-        <button class="btn-action btn-raise" id="btn-raise">加注</button>
-        <button class="btn-action btn-fold" id="btn-fold">弃牌</button>
-      </div>
-      
-      <div class="game-status" id="game-status">
-        <span id="status-text">等待游戏开始...</span>
+        
+        <div class="pot-info">
+          底池: <span id="pot-amount">0</span>
+        </div>
+        
+        <div class="community-cards" id="community-cards">
+          <!-- 公共牌 -->
+        </div>
+        
+        <div class="players-area" id="players-area">
+          <!-- 玩家区域 -->
+        </div>
+        
+        <div class="action-panel">
+          <div class="my-cards" id="my-cards">
+            <!-- 我的手牌 -->
+          </div>
+          
+          <div class="action-buttons" id="action-buttons" style="display: none;">
+            <button class="btn-game btn-fold" id="btn-fold">弃牌</button>
+            <button class="btn-game btn-check" id="btn-check">过牌</button>
+            <button class="btn-game btn-call" id="btn-call">跟注 <span id="call-amount">0</span></button>
+            <button class="btn-game btn-raise" id="btn-raise">加注</button>
+          </div>
+          
+          <div class="slider-container" id="bet-slider-container" style="display: none;">
+            <div class="bet-amount" id="bet-amount">0</div>
+            <input type="range" class="bet-slider" id="bet-slider" min="0" max="1000" value="0">
+          </div>
+        </div>
       </div>
       
       <!-- 摊牌弹窗 -->
@@ -176,6 +193,11 @@
           <span class="arrow">→</span>
         </div>
       </div>
+    </div>
+    
+    <!-- 版本号 -->
+    <div class="version-footer">
+      <span class="version-text">v1.0.0</span>
     </div>
   </div>
 

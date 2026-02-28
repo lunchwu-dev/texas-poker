@@ -503,6 +503,28 @@ app.get('/api/stats/:playerId', (req, res) => {
   });
 });
 
+// API: 清除所有数据（管理员功能）
+app.post('/api/admin/clear-all-data', (req, res) => {
+  try {
+    // 清除所有房间
+    rooms.clear();
+    
+    // 清除所有玩家
+    players.clear();
+    
+    // 断开所有socket连接
+    io.sockets.sockets.forEach(socket => {
+      socket.disconnect(true);
+    });
+    
+    console.log('所有数据已清除');
+    res.json({ success: true, message: '所有玩家历史数据和系统缓存已清除' });
+  } catch (error) {
+    console.error('清除数据失败:', error);
+    res.status(500).json({ success: false, message: '清除数据失败' });
+  }
+});
+
 // Socket.IO 连接处理
 io.on('connection', (socket) => {
   console.log('新玩家连接:', socket.id);

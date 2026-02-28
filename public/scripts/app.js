@@ -426,20 +426,29 @@ const App = {
     }
     
     emptyTip.style.display = 'none';
-    roomList.innerHTML = rooms.map(room => `
-      <div class="room-card" data-room-id="${room.id}">
-        <div class="room-info">
-          <span class="room-name">${room.name}</span>
-          <span class="room-state ${room.state}">${this.getRoomState(room.state)}</span>
+    roomList.innerHTML = rooms.map(room => {
+      const statusClass = room.state === 'waiting' ? 'status-waiting' : 
+                         room.state === 'playing' ? 'status-playing' : 'status-full';
+      const statusText = this.getRoomState(room.state);
+      const isFull = room.playerCount >= room.maxPlayers;
+      
+      return `
+        <div class="room-cell" data-room-id="${room.id}">
+          <div class="room-details">
+            <div class="room-name">${room.name}</div>
+            <div class="room-meta">${room.playerCount || 0}/${room.maxPlayers || 6} 人</div>
+          </div>
+          <div class="room-status">
+            <span class="status-badge ${statusClass}">${statusText}</span>
+          </div>
         </div>
-        <div class="room-players">${room.playerCount || 0}/${room.maxPlayers || 6} 人</div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
     
     // 绑定点击事件
-    roomList.querySelectorAll('.room-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const roomId = card.dataset.roomId;
+    roomList.querySelectorAll('.room-cell').forEach(cell => {
+      cell.addEventListener('click', () => {
+        const roomId = cell.dataset.roomId;
         const room = rooms.find(r => r.id === roomId);
         
         if (room.state !== 'waiting') {
