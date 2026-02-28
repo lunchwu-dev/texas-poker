@@ -9,7 +9,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/client/$1"
+      "destination": "/index.html"
     }
   ]
 }
