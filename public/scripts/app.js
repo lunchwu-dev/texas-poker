@@ -35,6 +35,30 @@ const App = {
     this.bindEvents();
     this.checkLoginStatus();
   },
+
+  // 生成设备ID
+  generateDeviceId() {
+    let deviceId = localStorage.getItem('deviceId');
+    if (!deviceId) {
+      deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('deviceId', deviceId);
+    }
+    return deviceId;
+  },
+
+  // 生成德州玩家昵称
+  generateNickname() {
+    const storedNickname = localStorage.getItem('nickname');
+    if (storedNickname) {
+      return storedNickname;
+    }
+    
+    // 生成随机序号
+    const randomNum = Math.floor(Math.random() * 9999) + 1;
+    const nickname = `德州玩家${randomNum}号`;
+    localStorage.setItem('nickname', nickname);
+    return nickname;
+  },
   
   // 加载用户信息
   loadUserInfo() {
@@ -76,22 +100,25 @@ const App = {
       this.showPage('index');
       this.initSocket();
     } else {
-      this.showPage('login');
+      // 自动生成设备ID和昵称，无需登录
+      const deviceId = this.generateDeviceId();
+      const nickname = this.generateNickname();
+      
+      const userInfo = {
+        id: deviceId,
+        nickName: nickname,
+        avatarUrl: '',
+        openid: deviceId
+      };
+      
+      this.saveUserInfo(userInfo);
+      this.initSocket();
+      this.showPage('index');
     }
   },
   
   // 绑定事件
   bindEvents() {
-    // 微信登录
-    document.getElementById('btn-wechat-login')?.addEventListener('click', () => {
-      this.handleWechatLogin();
-    });
-    
-    // 游客登录
-    document.getElementById('btn-guest-login')?.addEventListener('click', () => {
-      this.handleGuestLogin();
-    });
-    
     // Tab切换
     document.getElementById('tab-rooms')?.addEventListener('click', () => {
       this.switchTab('rooms');
@@ -376,15 +403,14 @@ const App = {
     fetch(`${this.serverUrl}/api/rooms`)
       .then(res => res.json())
       .then(rooms => {
-        this.renderRoomList(rooms);
+        // 只显示真实玩家创建的房间（移除模拟数据）
+        const realRooms = rooms.filter(room => room && room.id && room.name);
+        this.renderRoomList(realRooms);
       })
       .catch(err => {
         console.error('获取房间列表失败:', err);
-        // 使用模拟数据
-        this.renderRoomList([
-          { id: 'AAA11111', name: '欢乐牌桌', playerCount: 3, maxPlayers: 6, state: 'waiting' },
-          { id: 'BBB22222', name: '高手对决', playerCount: 5, maxPlayers: 6, state: 'preflop' }
-        ]);
+        // 错误时不显示模拟数据，保持空列表
+        this.renderRoomList([]);
       });
   },
   

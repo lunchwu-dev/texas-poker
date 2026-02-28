@@ -9,38 +9,33 @@
 <body>
   <div id="app">
     <!-- 登录页面 -->
-    <div id="page-login" class="page">
-      <div class="login-container">
-        <div class="logo-area">
-          <span class="poker-icon">🃏</span>
-          <h1 class="title">德州扑克</h1>
+  <div id="page-login" class="page hidden">
+    <div class="login-container">
+      <div class="logo-area">
+        <span class="poker-icon">🃏</span>
+        <h1 class="title">德州扑克</h1>
+      </div>
+      
+      <div class="loading-tip">
+        <span>正在为您分配账号...</span>
+      </div>
+      
+      <div class="features">
+        <div class="feature-item">
+          <span class="feature-icon">🎮</span>
+          <span class="feature-text">好友对战</span>
         </div>
-        
-        <button class="btn-wechat" id="btn-wechat-login">
-          <span class="wechat-icon">💬</span>
-          <span>微信一键登录</span>
-        </button>
-        
-        <div class="guest-login" id="btn-guest-login">
-          <span>暂不登录，先看看</span>
+        <div class="feature-item">
+          <span class="feature-icon">🏆</span>
+          <span class="feature-text">竞技排行</span>
         </div>
-        
-        <div class="features">
-          <div class="feature-item">
-            <span class="feature-icon">🎮</span>
-            <span class="feature-text">好友对战</span>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">🏆</span>
-            <span class="feature-text">竞技排行</span>
-          </div>
-          <div class="feature-item">
-            <span class="feature-icon">⚡</span>
-            <span class="feature-text">实时对战</span>
-          </div>
+        <div class="feature-item">
+          <span class="feature-icon">⚡</span>
+          <span class="feature-text">实时对战</span>
         </div>
       </div>
     </div>
+  </div>
 
     <!-- 大厅页面 -->
     <div id="page-index" class="page hidden">
