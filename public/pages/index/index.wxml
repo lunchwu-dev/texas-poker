@@ -1,0 +1,92 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <view class="header">
+    <view class="user-info" bindtap="goToProfile">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/assets/icons/default_avatar.png'}}" mode="aspectFill"></image>
+      <text class="nickname">{{userInfo.nickName || '游客'}}</text>
+    </view>
+  </view>
+  
+  <view class="tabs">
+    <view class="tab {{activeTab === 'rooms' ? 'active' : ''}}" bindtap="switchTab" data-tab="rooms">
+      牌桌列表
+    </view>
+    <view class="tab {{activeTab === 'create' ? 'active' : ''}}" bindtap="switchTab" data-tab="create">
+      创建房间
+    </view>
+  </view>
+  
+  <!-- 牌桌列表 -->
+  <scroll-view scroll-y="true" class="room-list" wx:if="{{activeTab === 'rooms'}}">
+    <view wx:if="{{rooms.length === 0}}" class="empty-tip">
+      <text>暂无房间，请创建房间</text>
+    </view>
+    
+    <view 
+      class="room-card" 
+      wx:for="{{rooms}}" 
+      wx:key="id"
+      bindtap="joinRoom" 
+      data-room-id="{{item.id}}"
+    >
+      <view class="room-info">
+        <text class="room-name">{{item.name}}</text>
+        <text class="room-state {{item.state}}">{{getRoomState(item.state)}}</text>
+      </view>
+      <view class="room-players">
+        <text>{{item.playerCount}}/{{item.maxPlayers}} 人</text>
+      </view>
+    </view>
+  </scroll-view>
+  
+  <!-- 创建房间 -->
+  <view class="create-room" wx:if="{{activeTab === 'create'}}">
+    <view class="input-group">
+      <text class="label">房间名称</text>
+      <input 
+        class="input-field" 
+        placeholder="输入房间名称" 
+        placeholder-class="placeholder"
+        bindinput="onRoomNameInput"
+        value="{{roomName}}"
+      />
+    </view>
+    
+    <view class="input-group">
+      <text class="label">密码（可选）</text>
+      <input 
+        class="input-field" 
+        placeholder="设置房间密码" 
+        placeholder-class="placeholder"
+        password="true"
+        bindinput="onPasswordInput"
+        value="{{password}}"
+      />
+    </view>
+    
+    <button class="btn-create" bindtap="createRoom">
+      创建房间
+    </button>
+  </view>
+  
+  <!-- 加入房间弹窗 -->
+  <view class="modal" wx:if="{{showJoinModal}}" bindtap="closeJoinModal">
+    <view class="modal-content" catchtap="preventBubble">
+      <text class="modal-title">加入房间</text>
+      <input 
+        class="input-field" 
+        placeholder="请输入房间号" 
+        placeholder-class="placeholder"
+        bindinput="onJoinRoomIdInput"
+      />
+      <input 
+        class="input-field" 
+        placeholder="请输入密码（如有）" 
+        placeholder-class="placeholder"
+        password="true"
+        bindinput="onJoinPasswordInput"
+      />
+      <button class="btn-join" bindtap="confirmJoinRoom">加入</button>
+    </view>
+  </view>
+</view>

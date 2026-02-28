@@ -1,0 +1,247 @@
+<!--pages/game/game.wxml-->
+<view class="game-container">
+  <!-- 顶部信息栏 -->
+  <view class="top-bar">
+    <view class="room-info">
+      <text class="room-name">{{room.name}}</text>
+      <text class="game-stage">{{getStageText(gameState.state)}}</text>
+    </view>
+    <view class="pot-info">
+      <text class="pot-label">底池</text>
+      <text class="pot-amount">💰 {{gameState.pot || 0}}</text>
+    </view>
+  </view>
+  
+  <!-- 牌桌区域 -->
+  <view class="table-area">
+    <!-- 公共牌 -->
+    <view class="community-cards">
+      <view class="cards-row">
+        <view 
+          class="card {{card ? 'visible' : ''}}" 
+          wx:for="{{gameState.communityCards}}" 
+          wx:key="index"
+        >
+          <text class="card-suit {{getSuitClass(item.suit)}}">{{item.suit}}</text>
+          <text class="card-rank {{getSuitClass(item.suit)}}">{{item.rank}}</text>
+        </view>
+        <!-- 空位占位 -->
+        <view class="card empty" wx:for="{{5 - (gameState.communityCards.length || 0)}}" wx:key="empty-{{index}}"></view>
+      </view>
+    </view>
+    
+    <!-- 玩家区域 -->
+    <view class="players-table">
+      <!-- 庄家标记 -->
+      <view class="dealer-marker" wx:if="{{gameState.dealer}}" style="{{getDealerPosition()}}">
+        <text>D</text>
+      </view>
+      
+      <!-- 玩家1 (上方) -->
+      <view class="player-position position-top" wx:if="{{players[0]}}">
+        <view class="player-info {{players[0].id === myPlayerId ? 'me' : ''}}">
+          <image class="player-avatar" src="{{players[0].avatar || '/assets/icons/default_avatar.png'}}"></image>
+          <text class="player-name">{{players[0].name}}</text>
+          <text class="player-chips">💰 {{players[0].chips}}</text>
+        </view>
+        <view class="player-cards">
+          <view class="card small {{players[0].folded ? 'folded' : ''}}" wx:if="{{players[0].cards[0]}}">
+            <text class="card-suit {{getSuitClass(players[0].cards[0].suit)}}">{{players[0].cards[0].suit}}</text>
+            <text class="card-rank {{getSuitClass(players[0].cards[0].suit)}}">{{players[0].cards[0].rank}}</text>
+          </view>
+          <view class="card small {{players[0].folded ? 'folded' : ''}}" wx:if="{{players[0].cards[1]}}">
+            <text class="card-suit {{getSuitClass(players[0].cards[1].suit)}}">{{players[0].cards[1].suit}}</text>
+            <text class="card-rank {{getSuitClass(players[0].cards[1].suit)}}">{{players[0].cards[1].rank}}</text>
+          </view>
+          <view class="card small folded" wx:if="{{players[0].folded && !players[0].cards[0]}}">
+            <text>🂠</text>
+          </view>
+        </view>
+        <view class="player-bet" wx:if="{{players[0].currentBet > 0}}">
+          <text>{{players[0].currentBet}}</text>
+        </view>
+        <view class="action-indicator" wx:if="{{gameState.currentPlayer === players[0].id}}">
+          <text class="action-text">行动中</text>
+        </view>
+        <view class="all-in-indicator" wx:if="{{players[0].allIn}}">
+          <text>ALL IN</text>
+        </view>
+      </view>
+      
+      <!-- 玩家2-5 (环绕牌桌) -->
+      <view class="player-position position-right" wx:if="{{players[1]}}">
+        <view class="player-info {{players[1].id === myPlayerId ? 'me' : ''}}">
+          <image class="player-avatar" src="{{players[1].avatar || '/assets/icons/default_avatar.png'}}"></image>
+          <text class="player-name">{{players[1].name}}</text>
+          <text class="player-chips">💰 {{players[1].chips}}</text>
+        </view>
+        <view class="player-cards">
+          <view class="card small {{players[1].folded ? 'folded' : ''}}" wx:if="{{players[1].cards[0]}}">
+            <text class="card-suit {{getSuitClass(players[1].cards[0].suit)}}">{{players[1].cards[0].suit}}</text>
+            <text class="card-rank {{getSuitClass(players[1].cards[0].suit)}}">{{players[1].cards[0].rank}}</text>
+          </view>
+          <view class="card small {{players[1].folded ? 'folded' : ''}}" wx:if="{{players[1].cards[1]}}">
+            <text class="card-suit {{getSuitClass(players[1].cards[1].suit)}}">{{players[1].cards[1].suit}}</text>
+            <text class="card-rank {{getSuitClass(players[1].cards[1].suit)}}">{{players[1].cards[1].rank}}</text>
+          </view>
+          <view class="card small folded" wx:if="{{players[1].folded && !players[1].cards[0]}}">
+            <text>🂠</text>
+          </view>
+        </view>
+        <view class="player-bet" wx:if="{{players[1].currentBet > 0}}">
+          <text>{{players[1].currentBet}}</text>
+        </view>
+        <view class="action-indicator" wx:if="{{gameState.currentPlayer === players[1].id}}">
+          <text class="action-text">行动中</text>
+        </view>
+        <view class="all-in-indicator" wx:if="{{players[1].allIn}}">
+          <text>ALL IN</text>
+        </view>
+      </view>
+      
+      <view class="player-position position-bottom" wx:if="{{players[2]}}">
+        <view class="player-info {{players[2].id === myPlayerId ? 'me' : ''}}">
+          <image class="player-avatar" src="{{players[2].avatar || '/assets/icons/default_avatar.png'}}"></image>
+          <text class="player-name">{{players[2].name}}</text>
+          <text class="player-chips">💰 {{players[2].chips}}</text>
+        </view>
+        <view class="player-cards">
+          <view class="card small {{players[2].folded ? 'folded' : ''}}" wx:if="{{players[2].cards[0]}}">
+            <text class="card-suit {{getSuitClass(players[2].cards[0].suit)}}">{{players[2].cards[0].suit}}</text>
+            <text class="card-rank {{getSuitClass(players[2].cards[0].suit)}}">{{players[2].cards[0].rank}}</text>
+          </view>
+          <view class="card small {{players[2].folded ? 'folded' : ''}}" wx:if="{{players[2].cards[1]}}">
+            <text class="card-suit {{getSuitClass(players[2].cards[1].suit)}}">{{players[2].cards[1].suit}}</text>
+            <text class="card-rank {{getSuitClass(players[2].cards[1].suit)}}">{{players[2].cards[1].rank}}</text>
+          </view>
+          <view class="card small folded" wx:if="{{players[2].folded && !players[2].cards[0]}}">
+            <text>🂠</text>
+          </view>
+        </view>
+        <view class="player-bet" wx:if="{{players[2].currentBet > 0}}">
+          <text>{{players[2].currentBet}}</text>
+        </view>
+        <view class="action-indicator" wx:if="{{gameState.currentPlayer === players[2].id}}">
+          <text class="action-text">行动中</text>
+        </view>
+        <view class="all-in-indicator" wx:if="{{players[2].allIn}}">
+          <text>ALL IN</text>
+        </view>
+      </view>
+      
+      <view class="player-position position-left" wx:if="{{players[3]}}">
+        <view class="player-info {{players[3].id === myPlayerId ? 'me' : ''}}">
+          <image class="player-avatar" src="{{players[3].avatar || '/assets/icons/default_avatar.png'}}"></image>
+          <text class="player-name">{{players[3].name}}</text>
+          <text class="player-chips">💰 {{players[3].chips}}</text>
+        </view>
+        <view class="player-cards">
+          <view class="card small {{players[3].folded ? 'folded' : ''}}" wx:if="{{players[3].cards[0]}}">
+            <text class="card-suit {{getSuitClass(players[3].cards[0].suit)}}">{{players[3].cards[0].suit}}</text>
+            <text class="card-rank {{getSuitClass(players[3].cards[0].suit)}}">{{players[3].cards[0].rank}}</text>
+          </view>
+          <view class="card small {{players[3].folded ? 'folded' : ''}}" wx:if="{{players[3].cards[1]}}">
+            <text class="card-suit {{getSuitClass(players[3].cards[1].suit)}}">{{players[3].cards[1].suit}}</text>
+            <text class="card-rank {{getSuitClass(players[3].cards[1].suit)}}">{{players[3].cards[1].rank}}</text>
+          </view>
+          <view class="card small folded" wx:if="{{players[3].folded && !players[3].cards[0]}}">
+            <text>🂠</text>
+          </view>
+        </view>
+        <view class="player-bet" wx:if="{{players[3].currentBet > 0}}">
+          <text>{{players[3].currentBet}}</text>
+        </view>
+        <view class="action-indicator" wx:if="{{gameState.currentPlayer === players[3].id}}">
+          <text class="action-text">行动中</text>
+        </view>
+        <view class="all-in-indicator" wx:if="{{players[3].allIn}}">
+          <text>ALL IN</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 我的手牌 -->
+    <view class="my-hand" wx:if="{{myCards.length > 0}}">
+      <view class="my-cards">
+        <view class="card my-card" wx:for="{{myCards}}" wx:key="index">
+          <text class="card-suit {{getSuitClass(item.suit)}}">{{item.suit}}</text>
+          <text class="card-rank {{getSuitClass(item.suit)}}">{{item.rank}}</text>
+        </view>
+      </view>
+      <text class="hand-type" wx:if="{{myBestHand}}">{{myBestHand.type}}</text>
+    </view>
+  </view>
+  
+  <!-- 操作按钮 -->
+  <view class="action-bar" wx:if="{{isMyTurn}}">
+    <view class="action-info">
+      <text>当前下注: {{gameState.currentBet || 0}}</text>
+      <text>我的筹码: {{myChips}}</text>
+    </view>
+    <view class="action-buttons">
+      <button class="btn-action fold" bindtap="fold">弃牌</button>
+      <button class="btn-action check" bindtap="check" wx:if="{{canCheck}}">过牌</button>
+      <button class="btn-action call" bindtap="call" wx:if="{{canCall}}">跟注 {{callAmount}}</button>
+      <button class="btn-action raise" bindtap="showRaiseModal">加注</button>
+      <button class="btn-action allin" bindtap="allIn">全下</button>
+    </view>
+  </view>
+  
+  <!-- 加注弹窗 -->
+  <view class="modal" wx:if="{{showRaiseModal}}" bindtap="closeRaiseModal">
+    <view class="modal-content" catchtap="preventBubble">
+      <text class="modal-title">加注</text>
+      <view class="raise-options">
+        <view 
+          class="raise-option {{raiseAmount === option ? 'active' : ''}}" 
+          wx:for="{{raiseOptions}}" 
+          wx:for-item="option"
+          wx:key="index"
+          bindtap="selectRaiseOption" 
+          data-amount="{{option}}"
+        >
+          {{option}}
+        </view>
+      </view>
+      <view class="custom-raise">
+        <input 
+          type="number" 
+          class="input-field" 
+          placeholder="自定义金额" 
+          bindinput="onRaiseInput"
+          value="{{customRaiseAmount}}"
+        />
+      </view>
+      <button class="btn-raise-confirm" bindtap="confirmRaise">确认加注</button>
+    </view>
+  </view>
+  
+  <!-- 摊牌结果弹窗 -->
+  <view class="modal" wx:if="{{showShowdownModal}}" bindtap="closeShowdownModal">
+    <view class="modal-content showdown-modal">
+      <text class="modal-title">摊牌结果</text>
+      <view class="showdown-results">
+        <view class="winner-info">
+          <text class="winner-label">获胜者</text>
+          <text class="winner-name">{{showdownData.winnerName}}</text>
+          <text class="win-amount">赢得 {{showdownData.winAmount}} 筹码</text>
+        </view>
+        <view class="hands-comparison">
+          <view class="hand-item" wx:for="{{showdownData.playerHands}}" wx:key="index">
+            <text class="hand-player">{{item.name}}</text>
+            <view class="hand-cards">
+              <text wx:if="{{item.cards}}">{{item.cards[0]?.suit}}{{item.cards[0]?.rank}} {{item.cards[1]?.suit}}{{item.cards[1]?.rank}}</text>
+              <text wx:else>弃牌</text>
+            </view>
+            <text class="hand-type" wx:if="{{item.hand}}">{{item.hand.type}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 等待提示 -->
+  <view class="waiting-overlay" wx:if="{{!isMyTurn && gameState.state !== 'waiting'}}">
+    <text>等待其他玩家...</text>
+  </view>
+</view>

@@ -1,0 +1,51 @@
+<!--pages/room/room.wxml-->
+<view class="container">
+  <view class="room-header">
+    <view class="back-btn" bindtap="goBack">
+      <text>← 返回</text>
+    </view>
+    <view class="room-title">
+      <text class="room-name">{{room.name}}</text>
+      <text class="room-id">房间号: {{room.id}}</text>
+    </view>
+  </view>
+  
+  <view class="players-area">
+    <view class="players-title">玩家列表 ({{room.players.length}}/6)</view>
+    <view class="players-list">
+      <view class="player-card" wx:for="{{room.players}}" wx:key="id">
+        <image class="player-avatar" src="{{item.avatar || '/assets/icons/default_avatar.png'}}" mode="aspectFill"></image>
+        <text class="player-name">{{item.name}}</text>
+        <view class="player-chips">
+          <text class="chip-icon">💰</text>
+          <text>{{item.chips}}</text>
+        </view>
+      </view>
+      
+      <!-- 空位占位 -->
+      <view class="player-card empty" wx:for="{{6 - room.players.length}}" wx:key="empty-{{index}}">
+        <view class="empty-slot">
+          <text>?</text>
+        </view>
+        <text class="player-name">等待加入</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="room-actions">
+    <button class="btn-invite" open-type="share">
+      邀请好友
+    </button>
+    <button 
+      class="btn-start" 
+      bindtap="startGame" 
+      wx:if="{{isOwner && room.players.length >= 2}}"
+    >
+      开始游戏
+    </button>
+    <view class="waiting-tip" wx:if="{{!isOwner || room.players.length < 2}}">
+      <text wx:if="{{room.players.length < 2}}">等待至少2名玩家加入...</text>
+      <text wx:if="{{isOwner && room.players.length >= 2}}">等待房主开始游戏...</text>
+    </view>
+  </view>
+</view>
